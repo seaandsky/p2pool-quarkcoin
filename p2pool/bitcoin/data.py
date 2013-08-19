@@ -232,6 +232,7 @@ def difficulty_to_target(difficulty):
     assert difficulty >= 0
     if difficulty == 0: return 2**256-1
     return min(int((0xffff0000 * 2**(256-64) + 1)/difficulty - 1 + 0.5), 2**256-1)
+    ###          please note: i have the old values on my server, to this is not tested yet
 
 # human addresses
 
