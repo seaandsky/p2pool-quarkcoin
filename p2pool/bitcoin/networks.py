@@ -29,7 +29,10 @@ nets = dict(
         CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Quarkcoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Quarkcoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.quarkcoin'), 'quarkcoin.conf'),
         BLOCK_EXPLORER_URL_PREFIX='http://192.168.201.164/block/',
         ADDRESS_EXPLORER_URL_PREFIX='http://192.168.201.164/address/',
-        SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**24 - 1),
+        ### Neisklar: normally 2**24 should be 2**20 BUT the quark enabled minerd is coded so that it only detects hashes below 0x000000xxxxxxx
+        ###           and 2*20 would be 0x00000FFFF, maybe chaing that in the miner  would be a good idea for slower ones... 
+        #SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**24 - 1), 
+        SANE_TARGET_RANGE=(2**256//2**32//1000 - 1, 2**256//2**20 - 1), 
         DUMB_SCRYPT_DIFF=1,
         DUST_THRESHOLD=0.001e8,
     ),
