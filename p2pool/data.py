@@ -11,6 +11,7 @@ from twisted.python import log
 import p2pool
 from p2pool.bitcoin import data as bitcoin_data, script, sha256
 from p2pool.util import math, forest, pack
+from p2pool.bitcoin import networks
 
 # hashlink
 
@@ -51,7 +52,20 @@ def load_share(share, net, peer_addr):
     else:
         raise ValueError('unknown share type: %r' % (share['type'],))
 
-DONATION_SCRIPT = '4104ffd03de44a6e11b9917f3a29f9443283d9871c9d743ef30d5eddcd37094b64d1b3d8090496b53256786bf5c82932ec23c3b74d9f05a6f95a8b5529352656664bac'.decode('hex')
+
+### Neisklar:
+### It took a while to figure it out:
+### This is a UNCOMPRESSED public key surrounded by 4104 ... ac
+### Important is the (clever or not?) way it is used:
+### ALL shares in the p2pools chains depend on that value, means if you would like to join a p2pool network with your own node with this value changed
+### would invalidate ALL shares. Means your own node would see all shares from the other nodes as invalid, and the p2pool network with the other value would see
+### all your shares as invalid. Of course if you run a standalone node as pool, this isn't a problem, as long as you DO NOT change this value after your local node
+### has produced some shares without deleting the share database /data/<network>
+### Also important: It must be so long, i tried it with newer Script wich includes only the pubkey hash (76a914...(pubkey_hash)...88ac), this will break the pool.
+		
+DONATION_SCRIPT = '4104ebc79bbfd3901db557108d9e8815bf13ff2c170a63ff1546a6e6d99ef90004f78b94753ba550e9be681cde100ed84a439103e03290f1d34cf4d7e1c3535d2a93ac'.decode('hex')
+
+
 
 class NewShare(object):
     VERSION = 13
@@ -587,7 +601,7 @@ class Share(object):
         merkle_root = bitcoin_data.check_merkle_link(self.gentx_hash, self.merkle_link)
         self.header = dict(self.min_header, merkle_root=merkle_root)
         self.pow_hash = net.PARENT.POW_FUNC(bitcoin_data.block_header_type.pack(self.header))
-        self.hash = self.header_hash = bitcoin_data.hash256(bitcoin_data.block_header_type.pack(self.header))
+        self.hash = self.header_hash = net.PARENT.BLOCKHASH_FUNC(bitcoin_data.block_header_type.pack(self.header))
         
         if self.target > net.MAX_TARGET:
             from p2pool import p2p

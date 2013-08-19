@@ -8,6 +8,80 @@ from p2pool.util import math
 # changes can be done by changing one, then the other
 
 nets = dict(
+
+    ###Neisklar: BOOTSTRAP_ADDRS need to be set for a real p2pool network
+    ###          PERSIST=True for a p2pool network.
+    ###          the settings now are for a solo node, acting as pool
+    ###          dunno if these share values needs some tweaking
+    ###          The two SPREAD values should definatly be a higher value for such fast coin
+    ###          with a relativly low difficulty, so maybe 60, which when we assume the pool 
+    ###          gets every third block it's around 90 minutes, means a better distribution of
+    ###          earnings, but newer miners will take some time to build up the income.
+    quarkcoin=math.Object(
+        PARENT=networks.nets['quarkcoin'],
+        SHARE_PERIOD=15, # seconds
+        NEW_SHARE_PERIOD=15, # seconds
+        CHAIN_LENGTH=24*60*60//10, # shares
+        REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=30, # blocks
+        NEW_SPREAD=30, # blocks
+        IDENTIFIER='fc70135c7a81bc6f'.decode('hex'),
+        PREFIX='9472ef181efcd37b'.decode('hex'),
+        P2P_PORT=8371,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**20 - 1,
+        PERSIST=False,
+        WORKER_PORT=8372,
+        BOOTSTRAP_ADDRS=''.split(' '),
+        #ANNOUNCE_CHANNEL='#p2pool',
+        VERSION_CHECK=lambda v: True,
+    ),
+    quarkcoin_testnet=math.Object(
+        PARENT=networks.nets['quarkcoin_testnet'],
+        SHARE_PERIOD=15, # seconds
+        NEW_SHARE_PERIOD=15, # seconds
+        CHAIN_LENGTH=24*60*60//10, # shares
+        REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        TARGET_LOOKBEHIND=200, # shares
+        SPREAD=30, # blocks
+        NEW_SPREAD=30, # blocks
+        IDENTIFIER='fc70235c7a81bc6f'.decode('hex'),
+        PREFIX='8472ef181efcd37b'.decode('hex'),
+        P2P_PORT=18371,
+        MIN_TARGET=0,
+        MAX_TARGET=2**256//2**20 - 1,
+        PERSIST=False,
+        WORKER_PORT=18372,
+        BOOTSTRAP_ADDRS=''.split(' '),
+        #ANNOUNCE_CHANNEL='#p2pool',
+        VERSION_CHECK=lambda v: True,
+    ),
+    ### Neisklar: that local one was a local testnet
+    #quarkcoin_local=math.Object(
+        #PARENT=networks.nets['quarkcoin_local'],
+        #SHARE_PERIOD=15, # seconds
+        #NEW_SHARE_PERIOD=15, # seconds
+        #CHAIN_LENGTH=24*60*60//10, # shares
+        #REAL_CHAIN_LENGTH=24*60*60//10, # shares
+        #TARGET_LOOKBEHIND=200, # shares
+        #SPREAD=10, # blocks
+        #NEW_SPREAD=10, # blocks
+        #IDENTIFIER='fc70335c7a81bc6f'.decode('hex'),
+        #PREFIX='7472ef181efcd37b'.decode('hex'),
+        #P2P_PORT=18333,
+        #MIN_TARGET=0,
+        #MAX_TARGET=2**256//2**20 - 1,
+        #PERSIST=False,
+        #WORKER_PORT=18334,
+        #BOOTSTRAP_ADDRS=''.split(' '),
+        #ANNOUNCE_CHANNEL='#p2pool',
+        #VERSION_CHECK=lambda v: True,
+    #),
+    
+    ###Neisklar: with the changes in the code (hardcoded decimals, use of new POW_HASH config
+    ###          and so one, using this version with other coins won't work out of the box
+    '''
     bitcoin=math.Object(
         PARENT=networks.nets['bitcoin'],
         SHARE_PERIOD=30, # seconds
@@ -48,7 +122,10 @@ nets = dict(
         ANNOUNCE_CHANNEL='#p2pool-alt',
         VERSION_CHECK=lambda v: 50700 <= v < 60000 or 60010 <= v < 60100 or 60400 <= v,
     ),
-    
+	
+	
+	
+	
     litecoin=math.Object(
         PARENT=networks.nets['litecoin'],
         SHARE_PERIOD=10, # seconds
@@ -57,7 +134,7 @@ nets = dict(
         REAL_CHAIN_LENGTH=24*60*60//10, # shares
         TARGET_LOOKBEHIND=200, # shares
         SPREAD=12, # blocks
-        NEW_SPREAD=3, # blocks
+        NEW_SPREAD=12, # blocks
         IDENTIFIER='e037d5b8c6923410'.decode('hex'),
         PREFIX='7208c1a53ef629b0'.decode('hex'),
         P2P_PORT=9338,
@@ -130,7 +207,7 @@ nets = dict(
         ANNOUNCE_CHANNEL='#p2pool-alt',
         VERSION_CHECK=lambda v: True,
     ),
-
+    '''
 )
 for net_name, net in nets.iteritems():
     net.NAME = net_name
