@@ -1,3 +1,11 @@
+This is just work for monkeycoin!
+
+Need these alse! 
+Quark scripts
+https://github.com/Neisklar/quarkcoin-hash-python
+Nicer looking Web UI
+https://github.com/hardcpp/P2PoolExtendedFrontEnd
+
 Requirements:
 -------------------------
 Generic:
