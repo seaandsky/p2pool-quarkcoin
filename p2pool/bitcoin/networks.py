@@ -14,18 +14,17 @@ nets = dict(
     ###          Maybe the dust threshold should also be rised somewhat, since we only have 5 decimals...
     quarkcoin=math.Object(
         P2P_PREFIX='fea503dd'.decode('hex'),
-        P2P_PORT=11973,
+        P2P_PORT=7576,
         ADDRESS_VERSION=58,
-        RPC_PORT=11972,
+        RPC_PORT=7575,
         RPC_CHECK=defer.inlineCallbacks(lambda bitcoind: defer.returnValue(
-            'quarkcoinaddress' in (yield bitcoind.rpc_help()) and
             not (yield bitcoind.rpc_getinfo())['testnet']
         )),
-        SUBSIDY_FUNC=lambda height: 2048*100000000 >> (height + 1)//60480,
+        SUBSIDY_FUNC=lambda height: 400*100000000 >> (height + 1)//60480,
         BLOCKHASH_FUNC=lambda data: pack.IntType(256).unpack(__import__('quark_hash').getPoWHash(data)),
         POW_FUNC=lambda data: pack.IntType(256).unpack(__import__('quark_hash').getPoWHash(data)),
         BLOCK_PERIOD=30, # s
-        SYMBOL='QRK',
+        SYMBOL='MKY',
         CONF_FILE_FUNC=lambda: os.path.join(os.path.join(os.environ['APPDATA'], 'Quarkcoin') if platform.system() == 'Windows' else os.path.expanduser('~/Library/Application Support/Quarkcoin/') if platform.system() == 'Darwin' else os.path.expanduser('~/.quarkcoin'), 'quarkcoin.conf'),
         BLOCK_EXPLORER_URL_PREFIX='http://176.221.46.81/block/',
         ADDRESS_EXPLORER_URL_PREFIX='http://176.221.46.81/address/',
