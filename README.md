@@ -1,6 +1,5 @@
 This is just work for monkeycoin!
 
-Need these alse! 
 Quark scripts
 https://github.com/Neisklar/quarkcoin-hash-python
 
